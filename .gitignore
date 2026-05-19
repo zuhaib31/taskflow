@@ -216,3 +216,37 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project-specific
+.env
+.env.local
+.env.*.local
+
+# Database
+*.db
+*.sqlite3
+
+# Docker
+docker-compose.override.yml
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+#Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
