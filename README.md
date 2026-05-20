@@ -26,6 +26,11 @@ Build a production-grade task management system while demonstrating:
 - DevOps best practices
 
 ## Features (Planned)
+## Features (Planned)
+- [x] Project structure and configuration management
+- [x] Database schema design
+- [x] Flask application factory pattern
+- [x] Health check endpoint
 - [ ] User registration and authentication
 - [ ] Create and manage projects
 - [ ] Create, update, and delete tasks
@@ -33,13 +38,58 @@ Build a production-grade task management system while demonstrating:
 - [ ] Status tracking (To Do, In Progress, Done)
 - [ ] Priority levels (Low, Medium, High)
 - [ ] Comments on tasks
-- [ ] Dashboard with projects statistics
+- [ ] Dashboard with project statistics
+- [ ] Docker containerization
+- [ ] CI/CD pipeline with Jenkins
+- [ ] AWS EC2 deployment
 
 ## Documentation
 More documentation coming as the project develops:
 - Architecture overview
 - Deployment guide
 - Local development setup
+
+## Local Development
+
+### Prerequisites
+
+- Python 3.11+
+- MySQL 8.0+
+- Docker and Docker Compose (recommended)
+
+### Configuration
+
+Copy `.env.example` to `.env` and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+### Database Setup
+
+Migrations live in `migrations/`. They can be run via:
+
+```bash
+python scripts/init_db.py
+```
+
+### Project Structure
+
+```
+taskflow/
+├── app/                   # Flask application package
+│   ├── __init__.py        # Application factory
+│   ├── config.py          # Environment-based configuration
+│   ├── routes/            # Blueprint modules
+│   ├── templates/         # Jinja2 templates
+│   └── static/            # CSS, JS, images
+├── migrations/            # SQL migration files
+├── scripts/               # Helper scripts
+├── tests/                 # pytest test files
+├── docs/                  # Documentation
+├── run.py                 # Application entry point
+└── requirements.txt       # Python dependencies
+```
 
 ## Author
 Built by Zohaib as a portfolio project demonstrating DevOps and full-stack capabilities.
