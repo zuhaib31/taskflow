@@ -31,7 +31,10 @@ Build a production-grade task management system while demonstrating:
 - [x] Database schema design
 - [x] Flask application factory pattern
 - [x] Health check endpoint
-- [ ] User registration and authentication
+- [x] User registration and authentication
+- [x] Password hashing with Werkzeug
+- [x] Session-based authentication
+- [x] Protected routes with @login_required
 - [ ] Create and manage projects
 - [ ] Create, update, and delete tasks
 - [ ] Task assignment to projects
