@@ -7,6 +7,8 @@ for development, testing, and production environments.
 """
 
 import os
+from datetime import timedelta
+
 from flask import Flask
 from flask_mysqldb import MySQL
 
@@ -29,12 +31,14 @@ def create_app(config_name: str | None = None) -> Flask:
     Returns:
         Configured Flask application instance.
     """
-    # Determine configuration to load
     if config_name is None:
         config_name = os.environ.get("FLASK_ENV", "development")
 
     app = Flask(__name__)
     app.config.from_object(config[config_name])
+
+    # Session lifetime - 7 days
+    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=7)
 
     # Run any config-specific initialization
     if hasattr(config[config_name], "init_app"):
@@ -43,8 +47,11 @@ def create_app(config_name: str | None = None) -> Flask:
     # Initialize extensions with the app
     mysql.init_app(app)
 
-    # Register blueprints (modular route groups)
+    # Register blueprints
     from app.routes.main import bp as main_bp
+    from app.routes.auth import bp as auth_bp
+
     app.register_blueprint(main_bp)
+    app.register_blueprint(auth_bp)
 
     return app
