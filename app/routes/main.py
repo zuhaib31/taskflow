@@ -7,9 +7,10 @@ Routes:
 - GET /dashboard: User dashboard (login required)
 """
 
-from flask import Blueprint, jsonify, render_template, session
+from flask import Blueprint, jsonify, render_template, session, redirect, url_for
 
 from app.models.user import User
+from app.models.project import Project
 from app.utils.decorators import login_required
 
 bp = Blueprint("main", __name__)
@@ -38,7 +39,6 @@ def index():
     If a user is already logged in, redirect them to their dashboard.
     """
     if session.get("user_id"):
-        from flask import redirect, url_for
         return redirect(url_for("main.dashboard"))
     return render_template("index.html")
 
@@ -49,14 +49,13 @@ def dashboard():
     """
     User's main dashboard - requires authentication.
 
-    Shows an overview of the user's projects and tasks.
-    Project/task data will be populated in Phase 4 and Phase 5.
+    Shows all of the user's projects and overall task statistics.
     """
-    # Fetch the current user's details for display
-    user = User.find_by_id(session["user_id"])
+    user_id = session["user_id"]
+    user = User.find_by_id(user_id)
+    projects = Project.find_all_by_user(user_id)
 
-    # Placeholders - these will be implemented in upcoming phases
-    projects = []  # Phase 4 will populate this
+    # Task stats are still placeholders - will be wired up in Phase 5
     task_stats = {
         "total": 0,
         "todo": 0,
