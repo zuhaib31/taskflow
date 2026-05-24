@@ -250,3 +250,122 @@ body {
 .btn-secondary:hover {
     background: #f0f7ff;
 }
+
+/* Dashboard */
+.dashboard {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    margin-bottom: 32px;
+}
+
+.dashboard-header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 4px;
+}
+
+.dashboard-subtitle {
+    color: #666;
+}
+
+/* Stats grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: white;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    border-top: 3px solid #1a73e8;
+}
+
+.stat-card.stat-todo { border-top-color: #ff9800; }
+.stat-card.stat-progress { border-top-color: #2196f3; }
+.stat-card.stat-done { border-top-color: #4caf50; }
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* Dashboard sections */
+.dashboard-section {
+    background: white;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.section-header h2 {
+    font-size: 1.2rem;
+}
+
+.btn-small {
+    padding: 6px 14px;
+    font-size: 0.9rem;
+    width: auto;
+}
+
+/* Projects grid */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.project-card {
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    padding: 16px;
+    transition: box-shadow 0.15s;
+}
+
+.project-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.project-card h3 {
+    font-size: 1rem;
+    margin-bottom: 6px;
+}
+
+.project-card p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.empty-state-hint {
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 8px;
+}

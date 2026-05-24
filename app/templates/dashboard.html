@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - TaskFlow{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Welcome back, {{ user.username }}!</h1>
+        <p class="dashboard-subtitle">Here's an overview of your work.</p>
+    </div>
+
+    <!-- Task statistics -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ task_stats.total }}</div>
+            <div class="stat-label">Total Tasks</div>
+        </div>
+        <div class="stat-card stat-todo">
+            <div class="stat-value">{{ task_stats.todo }}</div>
+            <div class="stat-label">To Do</div>
+        </div>
+        <div class="stat-card stat-progress">
+            <div class="stat-value">{{ task_stats.in_progress }}</div>
+            <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat-card stat-done">
+            <div class="stat-value">{{ task_stats.done }}</div>
+            <div class="stat-label">Done</div>
+        </div>
+    </div>
+
+    <!-- Projects section -->
+    <section class="dashboard-section">
+        <div class="section-header">
+            <h2>Your Projects</h2>
+            <a href="#" class="btn btn-primary btn-small">+ New Project</a>
+        </div>
+
+        {% if projects %}
+            <div class="projects-grid">
+                {% for project in projects %}
+                    <div class="project-card">
+                        <h3>{{ project.name }}</h3>
+                        <p>{{ project.description or "No description" }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>You don't have any projects yet.</p>
+                <p class="empty-state-hint">Projects help you organize related tasks. Create your first one to get started.</p>
+            </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
