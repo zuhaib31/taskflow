@@ -7,14 +7,24 @@
     <h1>TaskFlow</h1>
     <p class="hero-subtitle">A simple, focused task and project management tool.</p>
 
-    {% if session.user_id %}
-        <p>Welcome back, <strong>{{ session.username }}</strong>.</p>
-        <p>Your dashboard is coming soon...</p>
-    {% else %}
-        <div class="hero-actions">
-            <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Get Started</a>
-            <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">Sign In</a>
+    <div class="hero-actions">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Get Started</a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">Sign In</a>
+    </div>
+
+    <div class="hero-features">
+        <div class="feature">
+            <h3>Organize Projects</h3>
+            <p>Group your tasks into projects to stay focused.</p>
         </div>
-    {% endif %}
+        <div class="feature">
+            <h3>Track Progress</h3>
+            <p>Move tasks through To Do, In Progress, and Done.</p>
+        </div>
+        <div class="feature">
+            <h3>Set Priorities</h3>
+            <p>Mark what's most important with Low, Medium, High priorities.</p>
+        </div>
+    </div>
 </div>
 {% endblock %}
