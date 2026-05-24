@@ -85,3 +85,33 @@ def validate_password(password: str) -> tuple[bool, str]:
         return False, "Password must contain at least one number."
 
     return True, ""
+
+
+def validate_project_name(name: str) -> tuple[bool, str]:
+    """
+    Validate a project name.
+
+    Rules:
+    - 1-100 characters
+    - Cannot be only whitespace
+    """
+    if not name or not name.strip():
+        return False, "Project name is required."
+
+    if len(name) > 100:
+        return False, "Project name cannot exceed 100 characters."
+
+    return True, ""
+
+
+def validate_project_description(description: str) -> tuple[bool, str]:
+    """
+    Validate a project description.
+
+    Description is optional but if provided, has a length limit.
+    Stored as TEXT in DB but we cap at a reasonable UI length.
+    """
+    if description and len(description) > 2000:
+        return False, "Project description cannot exceed 2000 characters."
+
+    return True, ""
