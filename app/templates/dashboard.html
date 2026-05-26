@@ -33,22 +33,25 @@
     <section class="dashboard-section">
         <div class="section-header">
             <h2>Your Projects</h2>
-            <a href="#" class="btn btn-primary btn-small">+ New Project</a>
+            <a href="{{ url_for('projects.new') }}" class="btn btn-primary btn-small">+ New Project</a>
         </div>
 
         {% if projects %}
             <div class="projects-grid">
                 {% for project in projects %}
-                    <div class="project-card">
-                        <h3>{{ project.name }}</h3>
-                        <p>{{ project.description or "No description" }}</p>
-                    </div>
+                    <a href="{{ url_for('projects.show', project_id=project.id) }}" class="project-card-link">
+                        <div class="project-card">
+                            <h3>{{ project.name }}</h3>
+                            <p>{{ project.description or "No description" }}</p>
+                        </div>
+                    </a>
                 {% endfor %}
             </div>
         {% else %}
             <div class="empty-state">
                 <p>You don't have any projects yet.</p>
                 <p class="empty-state-hint">Projects help you organize related tasks. Create your first one to get started.</p>
+                <a href="{{ url_for('projects.new') }}" class="btn btn-primary" style="margin-top: 16px;">Create your first project</a>
             </div>
         {% endif %}
     </section>
