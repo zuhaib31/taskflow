@@ -50,8 +50,10 @@ def create_app(config_name: str | None = None) -> Flask:
     # Register blueprints
     from app.routes.main import bp as main_bp
     from app.routes.auth import bp as auth_bp
+    from app.routes.projects import bp as projects_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(projects_bp)
 
     return app
