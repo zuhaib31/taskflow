@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Projects - TaskFlow{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="section-header" style="margin-bottom: 24px;">
+        <h1>All Projects</h1>
+        <a href="{{ url_for('projects.new') }}" class="btn btn-primary btn-small">+ New Project</a>
+    </div>
+
+    {% if projects %}
+        <div class="projects-grid">
+            {% for project in projects %}
+                <a href="{{ url_for('projects.show', project_id=project.id) }}" class="project-card-link">
+                    <div class="project-card">
+                        <h3>{{ project.name }}</h3>
+                        <p>{{ project.description or "No description" }}</p>
+                        <div class="project-card-meta">
+                            Updated {{ project.updated_at.strftime('%b %d, %Y') if project.updated_at else '' }}
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>You don't have any projects yet.</p>
+            <p class="empty-state-hint">Create your first project to start organizing tasks.</p>
+            <a href="{{ url_for('projects.new') }}" class="btn btn-primary" style="margin-top: 16px;">Create your first project</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
