@@ -606,3 +606,29 @@ body {
     font-size: 0.95rem;
     margin: 0;
 }
+
+
+/* ===== Error pages ===== */
+.error-page {
+    text-align: center;
+    padding: 80px 20px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.error-code {
+    font-size: 5rem;
+    font-weight: 700;
+    color: #1a73e8;
+    line-height: 1;
+}
+
+.error-page h1 {
+    font-size: 1.5rem;
+    margin: 16px 0 8px;
+}
+
+.error-page p {
+    color: #666;
+    margin-bottom: 24px;
+}

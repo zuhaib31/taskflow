@@ -9,7 +9,7 @@ for development, testing, and production environments.
 import os
 from datetime import timedelta
 
-from flask import Flask
+from flask import Flask, render_template
 from flask_mysqldb import MySQL
 
 from app.config import config
@@ -55,5 +55,10 @@ def create_app(config_name: str | None = None) -> Flask:
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(projects_bp)
+
+    # Register error handlers
+    @app.errorhandler(404)
+    def not_found(error):
+        return render_template("404.html"), 404
 
     return app
