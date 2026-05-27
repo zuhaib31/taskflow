@@ -115,3 +115,70 @@ def validate_project_description(description: str) -> tuple[bool, str]:
         return False, "Project description cannot exceed 2000 characters."
 
     return True, ""
+
+
+def validate_task_title(title: str) -> tuple[bool, str]:
+    """
+    Validate a task title.
+
+    Rules:
+    - 1-200 characters
+    - Cannot be only whitespace
+    """
+    if not title or not title.strip():
+        return False, "Task title is required."
+
+    if len(title) > 200:
+        return False, "Task title cannot exceed 200 characters."
+
+    return True, ""
+
+
+def validate_task_description(description: str) -> tuple[bool, str]:
+    """Validate a task description (optional, length-capped)."""
+    if description and len(description) > 5000:
+        return False, "Task description cannot exceed 5000 characters."
+
+    return True, ""
+
+
+def validate_task_status(status: str) -> tuple[bool, str]:
+    """Validate that a status value is one of the allowed values."""
+    # Import here to avoid circular imports at module load time
+    from app.models.task import VALID_STATUSES
+
+    if status not in VALID_STATUSES:
+        return False, "Invalid status value."
+
+    return True, ""
+
+
+def validate_task_priority(priority: str) -> tuple[bool, str]:
+    """Validate that a priority value is one of the allowed values."""
+    from app.models.task import VALID_PRIORITIES
+
+    if priority not in VALID_PRIORITIES:
+        return False, "Invalid priority value."
+
+    return True, ""
+
+
+def validate_task_due_date(due_date_str: str):
+    """
+    Validate and parse an optional due date string.
+
+    Accepts empty string or YYYY-MM-DD format.
+    Returns (is_valid, error_or_date) where on success the second
+    element is a date object (or None for empty), on failure it's an
+    error string.
+    """
+    from datetime import datetime
+
+    if not due_date_str:
+        return True, None
+
+    try:
+        parsed = datetime.strptime(due_date_str, "%Y-%m-%d").date()
+        return True, parsed
+    except ValueError:
+        return False, "Invalid due date. Use YYYY-MM-DD format."
