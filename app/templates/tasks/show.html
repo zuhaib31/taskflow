@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}{{ task.title }} - TaskFlow{% endblock %}
+
+{% block content %}
+<div class="project-detail">
+    <div class="breadcrumb">
+        <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="{{ url_for('projects.show', project_id=project.id) }}">{{ project.name }}</a>
+        <span class="breadcrumb-separator">/</span>
+        <span>{{ task.title }}</span>
+    </div>
+
+    <div class="project-header">
+        <div>
+            <h1>{{ task.title }}</h1>
+            <div class="task-badges">
+                <span class="badge badge-status-{{ task.status }}">{{ task.status.replace('_', ' ').title() }}</span>
+                <span class="badge badge-priority-{{ task.priority }}">{{ task.priority.title() }} priority</span>
+                {% if task.due_date %}
+                    <span class="badge">Due {{ task.due_date.strftime('%b %d, %Y') }}</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="project-actions">
+            <a href="{{ url_for('tasks.edit', project_id=project.id, task_id=task.id) }}" class="btn btn-secondary btn-small">Edit</a>
+            <form
+                method="POST"
+                action="{{ url_for('tasks.destroy', project_id=project.id, task_id=task.id) }}"
+                class="inline-form"
+                onsubmit="return confirm('Delete this task? This cannot be undone.');"
+            >
+                <button type="submit" class="btn btn-danger btn-small">Delete</button>
+            </form>
+        </div>
+    </div>
+
+    {% if task.description %}
+        <div class="project-section">
+            <h2>Description</h2>
+            <p class="task-description">{{ task.description }}</p>
+        </div>
+    {% endif %}
+
+    <div class="project-meta">
+        <span>Created {{ task.created_at.strftime('%b %d, %Y') if task.created_at else '' }}</span>
+        {% if task.updated_at and task.updated_at != task.created_at %}
+            <span> · Updated {{ task.updated_at.strftime('%b %d, %Y') }}</span>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
