@@ -27,6 +27,8 @@ Build a production-grade task management system while demonstrating:
 
 ## Features (Planned)
 ## Features (Planned)
+## Features (Planned)
+
 - [x] Project structure and configuration management
 - [x] Database schema design
 - [x] Flask application factory pattern
@@ -35,7 +37,9 @@ Build a production-grade task management system while demonstrating:
 - [x] Password hashing with Werkzeug
 - [x] Session-based authentication
 - [x] Protected routes with @login_required
-- [ ] Create and manage projects
+- [x] Create and manage projects (CRUD)
+- [x] Ownership enforcement (IDOR protection)
+- [x] Custom 404 error page
 - [ ] Create, update, and delete tasks
 - [ ] Task assignment to projects
 - [ ] Status tracking (To Do, In Progress, Done)
