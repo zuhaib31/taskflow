@@ -21,6 +21,7 @@ from flask import (
 )
 
 from app.models.project import Project
+from app.models.task import Task
 from app.utils.decorators import login_required
 from app.utils.validators import (
     validate_project_name, validate_project_description
@@ -51,7 +52,6 @@ def create():
     name = request.form.get("name", "").strip()
     description = request.form.get("description", "").strip() or None
 
-    # Validate inputs
     is_valid, error_msg = validate_project_name(name)
     if not is_valid:
         flash(error_msg, "error")
@@ -70,7 +70,6 @@ def create():
             description=description,
         )
 
-    # Create the project
     project = Project(
         user_id=session["user_id"],
         name=name,
@@ -85,18 +84,25 @@ def create():
 @bp.route("/<int:project_id>")
 @login_required
 def show(project_id):
-    """Show a single project's details."""
+    """Show a single project with its tasks grouped by status."""
     project = Project.find_by_id_and_user(project_id, session["user_id"])
     if project is None:
         abort(404)
 
-    # Tasks will be added in Phase 5
-    tasks = []
+    tasks = Task.find_all_by_project(project.id)
+
+    # Group tasks by status for column-style display
+    tasks_by_status = {
+        "todo": [t for t in tasks if t.status == "todo"],
+        "in_progress": [t for t in tasks if t.status == "in_progress"],
+        "done": [t for t in tasks if t.status == "done"],
+    }
 
     return render_template(
         "projects/show.html",
         project=project,
         tasks=tasks,
+        tasks_by_status=tasks_by_status,
     )
 
 
@@ -125,7 +131,6 @@ def update(project_id):
     is_valid, error_msg = validate_project_name(name)
     if not is_valid:
         flash(error_msg, "error")
-        # Re-populate with submitted values for re-edit
         project.name = name
         project.description = description
         return render_template("projects/edit.html", project=project)
@@ -137,7 +142,6 @@ def update(project_id):
         project.description = description
         return render_template("projects/edit.html", project=project)
 
-    # Apply changes and persist
     project.name = name
     project.description = description
     project.update()
@@ -149,13 +153,7 @@ def update(project_id):
 @bp.route("/<int:project_id>/delete", methods=["POST"])
 @login_required
 def destroy(project_id):
-    """
-    Delete a project.
-
-    Note: We can't name this function 'delete' because that conflicts
-    with the model method. 'destroy' is the Rails convention and
-    commonly used in Python too.
-    """
+    """Delete a project (cascades to tasks and comments)."""
     project = Project.find_by_id_and_user(project_id, session["user_id"])
     if project is None:
         abort(404)

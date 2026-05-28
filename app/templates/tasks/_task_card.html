@@ -1,0 +1,38 @@
+{# Reusable task card. Expects `task` and `project` in context. #}
+<div class="task-card task-priority-{{ task.priority }}">
+    <a href="{{ url_for('tasks.show', project_id=project.id, task_id=task.id) }}" class="task-card-link">
+        <h3>{{ task.title }}</h3>
+        {% if task.description %}
+            <p class="task-card-desc">{{ task.description|truncate(80) }}</p>
+        {% endif %}
+    </a>
+
+    <div class="task-card-footer">
+        <span class="task-priority-label">{{ task.priority }}</span>
+        {% if task.due_date %}
+            <span class="task-due">Due {{ task.due_date.strftime('%b %d') }}</span>
+        {% endif %}
+    </div>
+
+    {# Quick status change buttons #}
+    <div class="task-card-actions">
+        {% if task.status != 'todo' %}
+            <form method="POST" action="{{ url_for('tasks.update_status', project_id=project.id, task_id=task.id) }}" class="inline-form">
+                <input type="hidden" name="status" value="todo">
+                <button type="submit" class="task-quick-btn" title="Move to To Do">←</button>
+            </form>
+        {% endif %}
+        {% if task.status != 'in_progress' %}
+            <form method="POST" action="{{ url_for('tasks.update_status', project_id=project.id, task_id=task.id) }}" class="inline-form">
+                <input type="hidden" name="status" value="in_progress">
+                <button type="submit" class="task-quick-btn" title="Move to In Progress">⇄</button>
+            </form>
+        {% endif %}
+        {% if task.status != 'done' %}
+            <form method="POST" action="{{ url_for('tasks.update_status', project_id=project.id, task_id=task.id) }}" class="inline-form">
+                <input type="hidden" name="status" value="done">
+                <button type="submit" class="task-quick-btn" title="Move to Done">✓</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
