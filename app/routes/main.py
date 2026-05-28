@@ -11,6 +11,7 @@ from flask import Blueprint, jsonify, render_template, session, redirect, url_fo
 
 from app.models.user import User
 from app.models.project import Project
+from app.models.task import Task
 from app.utils.decorators import login_required
 
 bp = Blueprint("main", __name__)
@@ -25,8 +26,6 @@ def health():
     - Docker healthcheck directive
     - Load balancers / monitoring systems
     - Jenkins post-deployment verification
-
-    Returns minimal JSON to keep it fast.
     """
     return jsonify({"status": "healthy", "service": "taskflow"}), 200
 
@@ -49,19 +48,13 @@ def dashboard():
     """
     User's main dashboard - requires authentication.
 
-    Shows all of the user's projects and overall task statistics.
+    Shows all of the user's projects and task statistics across
+    all projects.
     """
     user_id = session["user_id"]
     user = User.find_by_id(user_id)
     projects = Project.find_all_by_user(user_id)
-
-    # Task stats are still placeholders - will be wired up in Phase 5
-    task_stats = {
-        "total": 0,
-        "todo": 0,
-        "in_progress": 0,
-        "done": 0,
-    }
+    task_stats = Task.stats_by_user(user_id)
 
     return render_template(
         "dashboard.html",
