@@ -1,0 +1,84 @@
+# ==============================================================================
+# TaskFlow Docker Compose
+#
+# Defines and runs the full application stack:
+#   - mysql: MySQL 8.0 database with persistent storage
+#   - web:   The Flask app (built from our Dockerfile)
+#
+# The two services share a private network so the app can reach the database
+# by the hostname "mysql". Secrets and config come from a .env file at runtime.
+# ==============================================================================
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # MySQL database service
+  # ---------------------------------------------------------------------------
+  mysql:
+    image: mysql:8.0
+    container_name: taskflow-mysql
+    restart: unless-stopped
+    environment:
+      # These are read from the .env file (or environment) at runtime.
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DB}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+    volumes:
+      # Persist database data across container restarts. Without this,
+      # all data is lost when the container stops.
+      - mysql_data:/var/lib/mysql
+      # Run our schema migration automatically on first startup.
+      # MySQL runs any .sql files in this directory when the DB is first created.
+      - ./migrations/001_initial_schema.sql:/docker-entrypoint-initdb.d/001_initial_schema.sql:ro
+    networks:
+      - taskflow-network
+    healthcheck:
+      # MySQL takes time to initialize. This check lets other services
+      # wait until the database is actually ready to accept connections.
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ---------------------------------------------------------------------------
+  # Flask web application service
+  # ---------------------------------------------------------------------------
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: taskflow-web
+    restart: unless-stopped
+    ports:
+      # Map port 5000 on the host to port 5000 in the container.
+      # This is how you reach the app at http://<host-ip>:5000
+      - "5000:5000"
+    environment:
+      # App configuration, read from .env at runtime.
+      FLASK_ENV: "${FLASK_ENV}"
+      SECRET_KEY: "${SECRET_KEY}"
+      # The database host is "mysql" - the service name above. Docker's
+      # internal DNS resolves this to the MySQL container automatically.
+      MYSQL_HOST: "mysql"
+      MYSQL_PORT: "3306"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DB: "${MYSQL_DB}"
+      APP_PORT: "5000"
+    depends_on:
+      # Don't start the web app until MySQL reports healthy.
+      mysql:
+        condition: service_healthy
+    networks:
+      - taskflow-network
+
+# Named volume for MySQL data persistence.
+volumes:
+  mysql_data:
+
+# Private network for the services to communicate.
+networks:
+  taskflow-network:
+    driver: bridge
