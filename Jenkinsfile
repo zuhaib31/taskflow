@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         APP_DIR = '/home/ubuntu/taskflow'
-        HEALTH_URL = 'http://localhost:5000/health'
     }
 
     options {
@@ -55,16 +54,16 @@ pipeline {
             steps {
                 echo 'Verifying the application is healthy...'
                 sh '''
-                    sleep 10
-                    for i in $(seq 1 6); do
-                        if curl -fs ${HEALTH_URL} > /dev/null; then
+                    for i in $(seq 1 12); do
+                        STATUS=$(docker inspect --format='{{.State.Health.Status}}' taskflow-web 2>/dev/null || echo "unknown")
+                        echo "Attempt $i: taskflow-web health = $STATUS"
+                        if [ "$STATUS" = "healthy" ]; then
                             echo "Application is healthy."
                             exit 0
                         fi
-                        echo "Waiting for app to respond... attempt $i"
                         sleep 5
                     done
-                    echo "Health check failed."
+                    echo "Health check failed - container did not become healthy."
                     exit 1
                 '''
             }
