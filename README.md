@@ -26,13 +26,6 @@ Build a production-grade task management system while demonstrating:
 - DevOps best practices
 
 ## Features (Planned)
-## Features (Planned)
-## Features (Planned)
-
-- [x] Project structure and configuration management
-## Features (Planned)
-
-## Features (Planned)
 
 - [x] Project structure and configuration management
 - [x] Database schema design
