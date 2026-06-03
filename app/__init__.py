@@ -8,6 +8,7 @@ for development, testing, and production environments.
 
 import os
 from datetime import timedelta
+from typing import Optional
 
 from flask import Flask, render_template
 from flask_mysqldb import MySQL
@@ -19,7 +20,7 @@ from app.config import config
 mysql = MySQL()
 
 
-def create_app(config_name: str | None = None) -> Flask:
+def create_app(config_name: Optional[str] = None) -> Flask:
     """
     Create and configure a Flask application instance.
 
