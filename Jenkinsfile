@@ -30,6 +30,19 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps {
+                echo 'Running automated tests...'
+                sh '''
+                    docker run --rm \
+                      -v ${APP_DIR}:/app \
+                      -w /app \
+                      python:3.11-slim \
+                      bash -c "pip install --quiet -r requirements-test.txt && pytest --tb=short"
+                '''
+            }
+        }
+
         stage('Build') {
             steps {
                 echo 'Building the Docker image...'
